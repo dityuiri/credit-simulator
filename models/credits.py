@@ -1,6 +1,6 @@
 from models.constants import VEHICLE_TYPE_CAR, VEHICLE_TYPE_MOTORCYCLE, MAX_CREDIT_LIMIT, MAX_TENURE, MIN_TENURE, \
     VEHICLE_CONDITION_NEW, VEHICLE_CONDITION_OLD, MIN_DOWN_PAYMENT_NEW, MIN_DOWN_PAYMENT_OLD, BASE_INTEREST_RATE_CAR, \
-    BASE_INTEREST_RATE_MOTORCYCLE
+    BASE_INTEREST_RATE_MOTORCYCLE, CREDIT_INTEREST_PER_2YEARS, CREDIT_INTEREST_PER_YEAR
 from models.helpers import calculate_percentage
 
 import datetime
@@ -40,7 +40,6 @@ class Credit:
         self.total_credit = total_credit
         self.down_payment = down_payment
         self.tenure = tenure
-        self.base_interest_rate = self.get_base_interest_rate()
 
     def validate(self):
         if not isinstance(self.total_credit, int) or 0 > self.total_credit > MAX_CREDIT_LIMIT:
@@ -64,3 +63,19 @@ class Credit:
             return BASE_INTEREST_RATE_CAR
         elif self.vehicle.vehicle_type == VEHICLE_TYPE_MOTORCYCLE:
             return BASE_INTEREST_RATE_MOTORCYCLE
+
+    def calculate_monthly_installments(self):
+        interest_rate = self.get_base_interest_rate()
+        down_payment = self.down_payment
+        monthly_installments = []  # we will store it as a set like this (installments, interest_rate)
+        for year in range(0, self.tenure):
+            total_loan = down_payment + calculate_percentage(down_payment, interest_rate)
+            monthly_installment = total_loan / ((12*self.tenure) - 12*year)
+            monthly_installments.append((monthly_installment, interest_rate))
+
+            # update for the next iteration
+            yearly_installment = monthly_installment * 12
+            interest_rate += CREDIT_INTEREST_PER_2YEARS if year % 2 == 0 else CREDIT_INTEREST_PER_YEAR
+            down_payment = total_loan - yearly_installment
+
+        return monthly_installments

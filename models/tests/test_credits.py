@@ -62,6 +62,19 @@ class TestCredit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Credit(vehicle, 10000, "InvalidDownPayment", 5).validate()
 
+    def test_calculate_monthly_installments(self):
+        vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
+        credit = Credit(vehicle, 100000000, 75000000, 3)
+        results = credit.calculate_monthly_installments()
+
+        self.assertEqual(3, len(results))
+        self.assertEqual(2250000.00, results[0][0])
+        self.assertEqual(8, results[0][1])
+        self.assertEqual(2432250.00, results[1][0])
+        self.assertEqual(8.1, results[1][1])
+        self.assertEqual(2641423.50, results[2][0])
+        self.assertEqual(8.6, results[2][1])
+
 
 if __name__ == '__main__':
     unittest.main()
