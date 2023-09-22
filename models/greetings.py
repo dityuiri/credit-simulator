@@ -1,6 +1,9 @@
 class GreetingsModel:
-    def __init__(self):
-        self.message = "Hello, World!"
+    def __init__(self, name=None):
+        self.name = name
 
     def get_message(self):
-        return self.message
+        if self.name:
+            return f"Hello, {self.name}"
+
+        return "Hello, World!"
