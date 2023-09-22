@@ -59,9 +59,9 @@ class Credit:
             raise ValueError(f"Minimum down payment for this vehicle must be {min_down_payment}%")
 
     def get_base_interest_rate(self):
-        if self.vehicle.vehicle_type == VEHICLE_TYPE_CAR:
+        if self.vehicle.vehicle_type.lower() == VEHICLE_TYPE_CAR:
             return BASE_INTEREST_RATE_CAR
-        elif self.vehicle.vehicle_type == VEHICLE_TYPE_MOTORCYCLE:
+        elif self.vehicle.vehicle_type.lower() == VEHICLE_TYPE_MOTORCYCLE:
             return BASE_INTEREST_RATE_MOTORCYCLE
 
     def calculate_monthly_installments(self):
