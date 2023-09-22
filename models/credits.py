@@ -11,7 +11,6 @@ class Vehicle:
         self.vehicle_type = vehicle_type
         self.condition = condition
         self.year = year
-        self.validate()
 
     def validate(self):
         current_year = datetime.datetime.now().year
@@ -42,13 +41,8 @@ class Credit:
         self.down_payment = down_payment
         self.tenure = tenure
         self.base_interest_rate = self.get_base_interest_rate()
-        self.validate()
 
     def validate(self):
-        # Value validations
-        if not isinstance(self.vehicle, Vehicle):
-            raise ValueError("Vehicle must be a non-empty object")
-
         if not isinstance(self.total_credit, int) or 0 > self.total_credit > MAX_CREDIT_LIMIT:
             raise ValueError("Total credit must be a non-negative integer and not exceeding max credit limit")
 

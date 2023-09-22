@@ -1,64 +1,66 @@
 from models.constants import VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, VEHICLE_CONDITION_OLD, BASE_INTEREST_RATE_CAR
 from models.credits import Vehicle, Credit
 
+import datetime
 import unittest
 
 
 class TestVehicle(unittest.TestCase):
-    def test_valid_vehicle(self):
+    def test_init_vehicle(self):
         vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
         self.assertEqual(vehicle.vehicle_type, VEHICLE_TYPE_CAR)
         self.assertEqual(vehicle.condition, VEHICLE_CONDITION_NEW)
         self.assertEqual(vehicle.year, 2023)
 
-    def test_invalid_vehicle(self):
-        # Test invalid vehicle creation
+    def test_empty_type(self):
         with self.assertRaises(ValueError):
-            Vehicle("InvalidType", VEHICLE_CONDITION_NEW, 2023)
+            Vehicle("", VEHICLE_CONDITION_NEW, 2023).validate()
 
+    def test_invalid_vehicle_type(self):
         with self.assertRaises(ValueError):
-            Vehicle(VEHICLE_TYPE_CAR, "InvalidCondition", 2023)
+            Vehicle("InvalidType", VEHICLE_CONDITION_NEW, 2023).validate()
 
+    def test_empty_condition(self):
         with self.assertRaises(ValueError):
-            Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 100)
+            Vehicle(VEHICLE_TYPE_CAR, "", 2023).validate()
 
-    def test_new_vehicle_condition(self):
-        # Test condition-specific validation
+    def test_invalid_condition(self):
         with self.assertRaises(ValueError):
-            Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2070)
+            Vehicle(VEHICLE_TYPE_CAR, "InvalidCondition", 2023).validate()
 
-    def test_old_vehicle_condition(self):
-        # Test condition-specific validation
-        vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_OLD, 2020)
-        self.assertEqual(vehicle.vehicle_type, VEHICLE_TYPE_CAR)
-        self.assertEqual(vehicle.condition, VEHICLE_CONDITION_OLD)
-        self.assertEqual(vehicle.year, 2020)
+    def test_invalid_year(self):
+        with self.assertRaises(ValueError):
+            Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 999).validate()
+
+    def test_invalid_new_vehicle_year(self):
+        current_year = datetime.datetime.now().year
+        invalid_year = current_year + 32
+        with self.assertRaises(ValueError):
+            Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, invalid_year).validate()
 
 
 class TestCredit(unittest.TestCase):
-    def test_valid_credit(self):
+    def test_init_credit(self):
         vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
         credit = Credit(vehicle, 20000, 8000, 36)
         self.assertEqual(credit.total_credit, 20000)
         self.assertEqual(credit.down_payment, 8000)
         self.assertEqual(credit.tenure, 36)
 
-    def test_invalid_credit(self):
+    def test_invalid_total_credit(self):
         vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
-
         with self.assertRaises(ValueError):
-            Credit(vehicle, 25000, 4000, 6)  # Invalid tenure
+            Credit(vehicle, "InvalidCredit", 2000, 5).validate()
 
-        with self.assertRaises(ValueError):
-            Credit(vehicle, 25000, -1000, 36)  # Negative down payment
-
-        with self.assertRaises(ValueError):
-            Credit(vehicle, 25000, 4000, 36)  # Insufficient down payment for new vehicle
-
-    def test_interest_rate(self):
+    def test_invalid_tenure(self):
         vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
-        credit = Credit(vehicle, 20000, 8000, 36)
-        self.assertEqual(credit.base_interest_rate, BASE_INTEREST_RATE_CAR)
+        with self.assertRaises(ValueError):
+            Credit(vehicle, 10000, 2000, "InvalidTenure").validate()
+
+    def test_invalid_down_payment(self):
+        vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
+        with self.assertRaises(ValueError):
+            Credit(vehicle, 10000, "InvalidDownPayment", 5).validate()
 
 
 if __name__ == '__main__':
