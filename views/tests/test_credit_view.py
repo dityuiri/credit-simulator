@@ -1,8 +1,6 @@
 import contextlib
-import sys
 import unittest
 from io import StringIO
-
 import views.credit_view
 
 
@@ -27,7 +25,6 @@ class TestCreditView(unittest.TestCase):
 
         # Assert that the printed output matches the expected output
         self.assertEqual(printed_output, expected_output)
-
 
 if __name__ == "__main__":
     unittest.main()

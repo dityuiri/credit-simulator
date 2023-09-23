@@ -18,7 +18,7 @@ class CreditController:
         else:
             raise Exception(f"Failed to retrieve data. Status code: {response.status_code}")
 
-    def load_default_menu(self):
+    def load_existing_menu(self):
         try:
             data = self.fetch_data()
             vehicle = models.credits.Vehicle(
@@ -33,7 +33,6 @@ class CreditController:
             installments = credit.calculate_monthly_installments()
 
             self.view.display_monthly_installments(installments)
-        except ValueError as e:
+        except Exception as e:
             print(str(e))
-        except TypeError as e:
-            print(f"Check the type of your json object: {str(e)}")
+

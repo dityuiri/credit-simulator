@@ -9,4 +9,4 @@ if __name__ == '__main__':
     #     name = None
 
     controller = CreditController()
-    controller.load_default_menu()
+    controller.load_existing_menu()

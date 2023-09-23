@@ -9,3 +9,6 @@ class TestHelpers(unittest.TestCase):
         expected = "Rp. 345,600.23"
         result = format_currency(input)
         self.assertEqual(expected, result)
+
+if __name__ == "__main__":
+    unittest.main()

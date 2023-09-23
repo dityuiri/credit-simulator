@@ -55,7 +55,7 @@ class TestCredit(unittest.TestCase):
     def test_invalid_tenure(self):
         vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
         with self.assertRaises(ValueError):
-            Credit(vehicle, 10000, 2000, "InvalidTenure").validate()
+            Credit(vehicle, 10000, 2000, 20).validate()
 
     def test_invalid_down_payment(self):
         vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
@@ -75,6 +75,5 @@ class TestCredit(unittest.TestCase):
         self.assertEqual(2641423.50, results[2][0])
         self.assertEqual(8.6, results[2][1])
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
