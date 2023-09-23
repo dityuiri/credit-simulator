@@ -105,3 +105,9 @@
        ```sh
          $ make run-docker
        ```
+## Notes
+This project also using Github actions. So, to have this project connected to your repository, please provide two secrets in your action's settings
+```
+DOCKER_USERNAME = (your docker hub username)
+DOCKER_PASSWORD = (your docker hub password or access token)
+```
