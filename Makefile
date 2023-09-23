@@ -15,6 +15,10 @@ test-with-coverage:
 	coverage run -m unittest discover -s models/tests controllers/tests views/tests -p 'test_*.py'
 	coverage report -m
 
+test-with-coverage-html:
+	coverage run -m unittest discover -s models/tests controllers/tests views/tests -p 'test_*.py'
+	coverage html -d coverage_html_report
+
 build-docker:
 	docker build -t credit-simulator .
 
