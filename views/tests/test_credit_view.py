@@ -1,11 +1,12 @@
 import contextlib
+import os
 import unittest
 from io import StringIO
 from unittest.mock import patch
 import views.credit_view
 
 
-class TestCreditView(unittest.TestCase):
+class TestCreditViewDisplayMonthlyInstallments(unittest.TestCase):
     def test_display_monthly_installments(self):
         view = views.credit_view.CreditView()
 
@@ -26,6 +27,8 @@ class TestCreditView(unittest.TestCase):
         # Assert that the printed output matches the expected output
         self.assertEqual(printed_output, expected_output)
 
+
+class TestCreditViewGetInput(unittest.TestCase):
     @patch('builtins.input', side_effect=["Motor", "Baru", "2023", "1000000", "5", "50000"])
     def test_get_input(self, mock_input):
         view = views.credit_view.CreditView()
@@ -37,6 +40,39 @@ class TestCreditView(unittest.TestCase):
         self.assertEqual(user_input["total_credit"], "1000000")
         self.assertEqual(user_input["tenure"], "5")
         self.assertEqual(user_input["down_payment"], "50000")
+
+
+class TestCreditViewGetInputFromFile(unittest.TestCase):
+    def test_valid_input(self):
+        # Create a temporary test file with known input
+        with open('test_input.txt', 'w') as test_file:
+            test_file.write("Mobil\nBaru\n2022\n75000000\n2\n35000000")
+
+        view = views.credit_view.CreditView()
+        input_data = view.get_input_from_file('test_input.txt')
+
+        # Define the expected output based on the known input
+        expected_output = {
+            "vehicle_type": "Mobil",
+            "condition": "Baru",
+            "year": 2022,
+            "total_credit": 75000000.0,
+            "tenure": 2,
+            "down_payment": 35000000.0,
+        }
+
+        self.assertEqual(input_data, expected_output)
+        os.remove('test_input.txt')
+
+    def test_invalid_input(self):
+        with open('test_input.txt', 'w') as test_file:
+            test_file.write("Mobil\nBaru\n2022\n75000000")
+
+        with self.assertRaises(ValueError):
+            view = views.credit_view.CreditView()
+            view.get_input_from_file('test_input.txt')
+
+        os.remove('test_input.txt')
 
 
 if __name__ == "__main__":

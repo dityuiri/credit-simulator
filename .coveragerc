@@ -1,0 +1,9 @@
+[run]
+omit =
+    models/tests/*
+    views/tests/*
+    controllers/tests/*
+
+[html]
+# Output directory for HTML coverage reports.
+directory = coverage_html_report

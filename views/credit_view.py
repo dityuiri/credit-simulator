@@ -25,3 +25,21 @@ class CreditView:
             "down_payment": down_payment,
         }
 
+    @staticmethod
+    def get_input_from_file(filename):
+        with open(filename, 'r') as file:
+            lines = file.read().splitlines()
+            if len(lines) != 6:
+                raise ValueError("Input file must contain exactly 6 lines")
+
+            vehicle_type, condition, year, total_credit, tenure, down_payment = lines
+            return {
+                "vehicle_type": vehicle_type,
+                "condition": condition,
+                "year": int(year),
+                "total_credit": float(total_credit),
+                "tenure": int(tenure),
+                "down_payment": float(down_payment),
+            }
+
+

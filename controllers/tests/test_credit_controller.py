@@ -112,6 +112,43 @@ class TestCreditControllerCalculateNewInput(unittest.TestCase):
 
         mock_display.assert_not_called()
 
+class TestCreditControllerCalculateNewInputFromFile(unittest.TestCase):
+    @patch("controllers.credit_controller.CreditView.get_input_from_file")
+    @patch("controllers.credit_controller.CreditView.display_monthly_installments")
+    def test_ok(self, mock_display, mock_input):
+        # Create a mock response object
+        mock_input.return_value = {
+            "vehicle_type": "mobil",
+            "condition": "baru",
+            "year": "2023",
+            "total_credit": "1000000",
+            "tenure": "3",
+            "down_payment": "750000"
+        }
+
+        controller = CreditController()
+        controller.calculate_new_input_from_file(filename="haha.txt")
+
+        expected_installments = [(22500.0, 8), (24322.5, 8.1), (26414.235, 8.6)]
+        mock_display.assert_called_with(expected_installments)
+
+    @patch("controllers.credit_controller.CreditView.get_input_from_file")
+    @patch("controllers.credit_controller.CreditView.display_monthly_installments")
+    def test_invalid_vehicle(self, mock_display, mock_input):
+        # Create a mock response object
+        mock_input.return_value = {
+            "vehicle_type": "motor",
+            "condition": "baru",
+            "year": "2029",
+            "total_credit": "1000000",
+            "tenure": "5",
+            "down_payment": "50000"
+        }
+
+        controller = CreditController()
+        controller.calculate_new_input_from_file(filename="haha.txt")
+
+        mock_display.assert_not_called()
 
 if __name__ == "__main__":
     unittest.main()

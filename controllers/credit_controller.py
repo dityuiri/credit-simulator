@@ -20,54 +20,68 @@ class CreditController:
 
     def calculate_new_input(self):
         user_input = self.view.get_input()
-
         try:
-            vehicle_type = user_input["vehicle_type"]
-            condition = user_input["condition"]
-            year = int(user_input["year"])
-            total_credit = int(user_input["total_credit"])
-            tenure = int(user_input["tenure"])
-            down_payment = int(user_input["down_payment"])
-
-            vehicle = models.credits.Vehicle(
-                vehicle_type=vehicle_type,
-                condition=condition,
-                year=year
+            credit = self.create_and_validate_credit(
+                vehicle_type=user_input["vehicle_type"],
+                condition=user_input["condition"],
+                year=user_input["year"],
+                total_credit=user_input["total_credit"],
+                down_payment=user_input["down_payment"],
+                tenure=user_input["tenure"],
             )
-            vehicle.validate()
-
-            credit = models.credits.Credit(
-                vehicle=vehicle,
-                total_credit=total_credit,
-                down_payment=down_payment,
-                tenure=tenure
-            )
-            credit.validate()
 
             installments = credit.calculate_monthly_installments()
-
             self.view.display_monthly_installments(installments)
         except Exception as e:
-            print(str(e))
+            print(f'Error: {str(e)}')
+
+    def calculate_new_input_from_file(self, filename):
+        file_input = self.view.get_input_from_file(filename)
+        try:
+            credit = self.create_and_validate_credit(
+                vehicle_type=file_input["vehicle_type"],
+                condition=file_input["condition"],
+                year=file_input["year"],
+                total_credit=file_input["total_credit"],
+                down_payment=file_input["down_payment"],
+                tenure=file_input["tenure"],
+            )
+
+            installments = credit.calculate_monthly_installments()
+            self.view.display_monthly_installments(installments)
+        except Exception as e:
+            print(f'Error: {str(e)}')
 
     def load_existing_menu(self):
         try:
             data = self.fetch_data()
-            vehicle = models.credits.Vehicle(
+            credit = self.create_and_validate_credit(
                 vehicle_type=data.get("vehicleModel").get("vehicleType"),
                 condition=data.get("vehicleModel").get("vehicleCondition"),
-                year=int(data.get("vehicleModel").get("tahunMobil")))
-            vehicle.validate()
-
-            credit = models.credits.Credit(vehicle=vehicle,
-                                           total_credit=int(data.get("vehicleModel").get("jumlahPinjaman")),
-                                           down_payment=int(data.get("vehicleModel").get("jumlahDownPayment")),
-                                           tenure=int(data.get("vehicleModel").get("tenorCicilan")))
-            credit.validate()
+                year=data.get("vehicleModel").get("tahunMobil"),
+                total_credit=data.get("vehicleModel").get("jumlahPinjaman"),
+                down_payment=data.get("vehicleModel").get("jumlahDownPayment"),
+                tenure=data.get("vehicleModel").get("tenorCicilan"),
+            )
 
             installments = credit.calculate_monthly_installments()
-
             self.view.display_monthly_installments(installments)
         except Exception as e:
-            print(str(e))
+            print(f'Error: {str(e)}')
 
+    @staticmethod
+    def create_and_validate_credit(vehicle_type, condition, year, total_credit, down_payment, tenure):
+        vehicle = models.credits.Vehicle(
+            vehicle_type=vehicle_type,
+            condition=condition,
+            year=int(year))
+        vehicle.validate()
+
+        credit = models.credits.Credit(vehicle=vehicle,
+                                       total_credit=int(total_credit),
+                                       down_payment=int(down_payment),
+                                       tenure=int(tenure))
+
+        credit.validate()
+
+        return credit

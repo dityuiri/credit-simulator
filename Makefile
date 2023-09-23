@@ -1,14 +1,11 @@
-PYTHON=python
-ARGS=$(filter-out $@,$(MAKECMDGOALS))
+SHELL := /bin/bash
+PYTHON := python
 
 prepare:
 	pip install -r requirements.txt
 
 run:
-	$(PYTHON) main.py
-
-run-with-args:
-	$(PYTHON) main.py $(ARGS)
+	$(PYTHON) main.py $(input_file)
 
 test:
 	$(PYTHON) -m unittest discover -s models/tests controllers/tests views/tests -p 'test_*.py'

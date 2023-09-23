@@ -42,10 +42,10 @@ class Credit:
         self.tenure = tenure
 
     def validate(self):
-        if not isinstance(self.total_credit, int) or 0 > self.total_credit > MAX_CREDIT_LIMIT:
+        if not isinstance(self.total_credit, int) or self.total_credit > MAX_CREDIT_LIMIT or self.total_credit <= 0:
             raise ValueError("Total credit must be a non-negative integer and not exceeding max credit limit")
 
-        if not isinstance(self.tenure, int) or MIN_TENURE > self.tenure > MAX_TENURE:
+        if not isinstance(self.tenure, int) or self.tenure > MAX_TENURE or MIN_TENURE > self.tenure:
             raise ValueError(f"Tenure must be in the range of {MIN_TENURE} - {MAX_TENURE}")
 
         if not isinstance(self.down_payment, int) or self.down_payment < 0 or self.down_payment > self.total_credit:
