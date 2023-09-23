@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from models.constants import VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW
+from models.constants import VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, VEHICLE_TYPE_MOTORCYCLE, VEHICLE_CONDITION_OLD
 from models.credits import Vehicle, Credit
 
 
@@ -62,7 +62,7 @@ class TestCredit(unittest.TestCase):
         with self.assertRaises(ValueError):
             Credit(vehicle, 10000, "InvalidDownPayment", 5).validate()
 
-    def test_calculate_monthly_installments(self):
+    def test_calculate_monthly_installments_car(self):
         vehicle = Vehicle(VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, 2023)
         credit = Credit(vehicle, 100000000, 75000000, 3)
         results = credit.calculate_monthly_installments()
@@ -74,6 +74,17 @@ class TestCredit(unittest.TestCase):
         self.assertEqual(8.1, results[1][1])
         self.assertEqual(2641423.50, results[2][0])
         self.assertEqual(8.6, results[2][1])
+
+    def test_calculate_monthly_installments_motorcycle(self):
+        vehicle = Vehicle(VEHICLE_TYPE_MOTORCYCLE, VEHICLE_CONDITION_OLD, 2023)
+        credit = Credit(vehicle, 100000000, 75000000, 2)
+        results = credit.calculate_monthly_installments()
+
+        self.assertEqual(2, len(results))
+        self.assertEqual(3406250.0, results[0][0])
+        self.assertEqual(9, results[0][1])
+        self.assertEqual(3716218.75, results[1][0])
+        self.assertEqual(9.1, results[1][1])
 
 
 if __name__ == "__main__":
