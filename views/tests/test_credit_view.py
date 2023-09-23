@@ -1,6 +1,7 @@
 import contextlib
 import unittest
 from io import StringIO
+from unittest.mock import patch
 import views.credit_view
 
 
@@ -16,7 +17,6 @@ class TestCreditView(unittest.TestCase):
 
         printed_output = captured_output.getvalue()
 
-
         # Define the expected output
         expected_output = (
             "tahun 1 : Rp. 340,000.00/bulan, Suku Bunga : 8%\n"
@@ -25,6 +25,19 @@ class TestCreditView(unittest.TestCase):
 
         # Assert that the printed output matches the expected output
         self.assertEqual(printed_output, expected_output)
+
+    @patch('builtins.input', side_effect=["Motor", "Baru", "2023", "1000000", "5", "50000"])
+    def test_get_input(self, mock_input):
+        view = views.credit_view.CreditView()
+        user_input = view.get_input()
+
+        self.assertEqual(user_input["vehicle_type"], "motor")
+        self.assertEqual(user_input["condition"], "baru")
+        self.assertEqual(user_input["year"], "2023")
+        self.assertEqual(user_input["total_credit"], "1000000")
+        self.assertEqual(user_input["tenure"], "5")
+        self.assertEqual(user_input["down_payment"], "50000")
+
 
 if __name__ == "__main__":
     unittest.main()

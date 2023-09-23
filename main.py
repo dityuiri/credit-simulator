@@ -7,6 +7,9 @@ if __name__ == '__main__':
     #     name = sys.argv[1]
     # else:
     #     name = None
-
+    print("Credit Simulator")
     controller = CreditController()
+    controller.calculate_new_input()
+    print("==========")
+    print("Load Existing Calculations from API")
     controller.load_existing_menu()

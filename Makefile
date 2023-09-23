@@ -11,9 +11,9 @@ run-with-args:
 	$(PYTHON) main.py $(ARGS)
 
 test:
-	$(PYTHON) -m unittest discover -s models/tests -p 'test_*.py' -s controllers/tests -p 'test_*.py' -s views/tests -p 'test_*.py'
+	$(PYTHON) -m unittest discover -s models/tests controllers/tests views/tests -p 'test_*.py'
 
 test-with-coverage:
-	coverage run -m unittest discover -s models/tests -p 'test_*.py' -s controllers/tests -p 'test_*.py' -s views/tests -p 'test_*.py'
+	coverage run -m unittest discover -s models/tests controllers/tests views/tests -p 'test_*.py'
 	coverage report -m
 
