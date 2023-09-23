@@ -48,7 +48,7 @@ class Credit:
         if not isinstance(self.tenure, int) or MIN_TENURE > self.tenure > MAX_TENURE:
             raise ValueError(f"Tenure must be in the range of {MIN_TENURE} - {MAX_TENURE}")
 
-        if not isinstance(self.down_payment, int) or self.down_payment < 0:
+        if not isinstance(self.down_payment, int) or self.down_payment < 0 or self.down_payment > self.total_credit:
             raise ValueError("Down payment must be a non-negative integer")
 
         min_down_payment = (
