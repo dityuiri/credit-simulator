@@ -22,7 +22,7 @@ jobs:
         run: make prepare
 
   test:
-    needs: prepare
+    needs: preparation
     runs-on: ubuntu-latest
     steps:
     - name: Run tests with coverage
