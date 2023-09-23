@@ -41,5 +41,3 @@ class CreditView:
                 "tenure": int(tenure),
                 "down_payment": float(down_payment),
             }
-
-

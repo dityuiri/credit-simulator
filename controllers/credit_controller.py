@@ -1,8 +1,9 @@
-import requests
 import json
+
+import requests
+
 import config
 import models.credits
-
 from views.credit_view import CreditView
 
 

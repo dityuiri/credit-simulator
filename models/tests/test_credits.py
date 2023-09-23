@@ -1,8 +1,8 @@
-from models.constants import VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW, VEHICLE_CONDITION_OLD, BASE_INTEREST_RATE_CAR
-from models.credits import Vehicle, Credit
-
 import datetime
 import unittest
+
+from models.constants import VEHICLE_TYPE_CAR, VEHICLE_CONDITION_NEW
+from models.credits import Vehicle, Credit
 
 
 class TestVehicle(unittest.TestCase):
@@ -74,6 +74,7 @@ class TestCredit(unittest.TestCase):
         self.assertEqual(8.1, results[1][1])
         self.assertEqual(2641423.50, results[2][0])
         self.assertEqual(8.6, results[2][1])
+
 
 if __name__ == "__main__":
     unittest.main()

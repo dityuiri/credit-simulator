@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import patch, Mock
+
 from controllers.credit_controller import CreditController
 
 
@@ -112,6 +113,7 @@ class TestCreditControllerCalculateNewInput(unittest.TestCase):
 
         mock_display.assert_not_called()
 
+
 class TestCreditControllerCalculateNewInputFromFile(unittest.TestCase):
     @patch("controllers.credit_controller.CreditView.get_input_from_file")
     @patch("controllers.credit_controller.CreditView.display_monthly_installments")
@@ -149,6 +151,7 @@ class TestCreditControllerCalculateNewInputFromFile(unittest.TestCase):
         controller.calculate_new_input_from_file(filename="haha.txt")
 
         mock_display.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()

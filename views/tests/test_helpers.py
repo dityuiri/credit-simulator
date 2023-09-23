@@ -1,6 +1,6 @@
-from views.helpers import format_currency
-
 import unittest
+
+from views.helpers import format_currency
 
 
 class TestHelpers(unittest.TestCase):

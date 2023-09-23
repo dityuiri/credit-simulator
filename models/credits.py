@@ -1,9 +1,9 @@
+import datetime
+
 from models.constants import VEHICLE_TYPE_CAR, VEHICLE_TYPE_MOTORCYCLE, MAX_CREDIT_LIMIT, MAX_TENURE, MIN_TENURE, \
     VEHICLE_CONDITION_NEW, VEHICLE_CONDITION_OLD, MIN_DOWN_PAYMENT_NEW, MIN_DOWN_PAYMENT_OLD, BASE_INTEREST_RATE_CAR, \
     BASE_INTEREST_RATE_MOTORCYCLE, CREDIT_INTEREST_PER_2YEARS, CREDIT_INTEREST_PER_YEAR
 from models.helpers import calculate_percentage
-
-import datetime
 
 
 class Vehicle:
@@ -30,7 +30,8 @@ class Vehicle:
         if not isinstance(self.year, int) or self.year < 1000 or self.year > 9999:
             raise ValueError("Year must be a non-negative integer and 4 digit valid year")
 
-        if self.condition.lower() == VEHICLE_CONDITION_NEW and (self.year < current_year-1 or self.year > current_year):
+        if self.condition.lower() == VEHICLE_CONDITION_NEW and (
+                self.year < current_year - 1 or self.year > current_year):
             raise ValueError("For New vehicle, the year must be in the current year or the previous one")
 
 
@@ -70,7 +71,7 @@ class Credit:
         monthly_installments = []  # we will store it as a set like this (installments, interest_rate)
         for year in range(0, self.tenure):
             total_loan = down_payment + calculate_percentage(down_payment, interest_rate)
-            monthly_installment = total_loan / ((12*self.tenure) - 12*year)
+            monthly_installment = total_loan / ((12 * self.tenure) - 12 * year)
             monthly_installments.append((monthly_installment, interest_rate))
 
             # update for the next iteration

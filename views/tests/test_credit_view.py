@@ -3,6 +3,7 @@ import os
 import unittest
 from io import StringIO
 from unittest.mock import patch
+
 import views.credit_view
 
 

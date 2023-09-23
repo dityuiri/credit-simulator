@@ -1,5 +1,6 @@
-from controllers.credit_controller import CreditController
 import sys
+
+from controllers.credit_controller import CreditController
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

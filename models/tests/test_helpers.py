@@ -1,6 +1,6 @@
-from models.helpers import calculate_percentage
-
 import unittest
+
+from models.helpers import calculate_percentage
 
 
 class TestHelpers(unittest.TestCase):
